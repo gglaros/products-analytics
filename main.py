@@ -1,8 +1,3 @@
-"""Run the full pipeline: load -> clean -> analyse -> charts + markdown report.
-
-Usage:
-    python main.py [--input data/raw/sales.csv] [--reports reports]
-"""
 from __future__ import annotations
 
 import argparse

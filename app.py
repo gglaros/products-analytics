@@ -1,8 +1,4 @@
-"""Streamlit dashboard for the sales analysis pipeline.
 
-Run with:
-    streamlit run app.py
-"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -18,7 +14,6 @@ DATA_PATH = Path(__file__).parent / "data" / "raw" / "sales.csv"
 st.set_page_config(page_title="Sales Analysis", page_icon="🛒", layout="wide")
 
 
-# ---------- Data (cached: Streamlit re-runs the whole script on every interaction) ----------
 @st.cache_data
 def get_data(file) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     raw = load_raw(file)
@@ -32,7 +27,6 @@ st.caption("pandas pipeline: Load → Clean → Analyze → Visualize")
 uploaded = st.sidebar.file_uploader("Upload your own sales CSV (optional)", type="csv")
 raw, df_all, cleaning_report = get_data(uploaded or DATA_PATH)
 
-# ---------- Sidebar filters ----------
 st.sidebar.header("Filters")
 regions = st.sidebar.multiselect(
     "Region", sorted(df_all["region"].unique()), default=sorted(df_all["region"].unique())
@@ -58,7 +52,6 @@ tab_load, tab_clean, tab_analyze, tab_viz = st.tabs(
     ["1. Load", "2. Clean", "3. Analyze", "4. Visualize"]
 )
 
-# ---------- 1. Load: explore the raw data ----------
 with tab_load:
     st.subheader("Raw data")
     c1, c2, c3 = st.columns(3)
@@ -97,7 +90,6 @@ with tab_clean:
     st.markdown("**Cleaned data**")
     st.dataframe(df_all.head(50), width="stretch")
 
-# ---------- 3. Analyze ----------
 with tab_analyze:
     k = analysis.kpis(df)
     c1, c2, c3, c4, c5 = st.columns(5)
@@ -124,7 +116,7 @@ with tab_analyze:
     st.markdown("**Category × region (€)**")
     st.dataframe(analysis.category_by_region(df), width="stretch")
 
-# ---------- 4. Visualize ----------
+
 with tab_viz:
     monthly = analysis.monthly_revenue(df)
     st.markdown("**Monthly revenue**")
